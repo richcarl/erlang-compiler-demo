@@ -1,0 +1,22 @@
+%% -*- erlang -*-
+
+module 'core_example'
+['length'/1]
+
+attributes []
+
+'length'/1 =
+    fun (List) ->
+        %% local definitions with recursion
+        letrec
+            'inc'/1 = fun (X) -> call 'erlang':'+'(X,1)
+
+            'len'/2 = fun (L, A) ->
+                          case L of
+                              [H | T] when 'true' ->
+                                  apply 'len'/2(T, apply 'inc'/1(A))
+                              [] when 'true' -> A
+                          end
+        in
+            apply 'len'/2(List, 0)
+end
